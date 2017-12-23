@@ -3,12 +3,21 @@
  */
 
 
+ const parentOfCards = document.getElementById('deck');
+ const cards = document.getElementsByClassName('card');
+ let cardsArray = Array.from(cards);
+ console.log(cardsArray);
+
+
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+
+ cardsArray = shuffle(cardsArray);
+ cardsArray.map(e => parentOfCards.appendChild(e));
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -36,3 +45,29 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+ listOfOpenCards = [];
+
+ function checkMatch(){
+     console.log(listOfOpenCards[0].firstElementChild.classList[1], listOfOpenCards[1].firstElementChild.classList[1]);
+     if (listOfOpenCards[0].firstElementChild.classList[1] === listOfOpenCards[1].firstElementChild.classList[1]){
+        listOfOpenCards[0].className += ' match';
+        listOfOpenCards[1].className += ' match';
+        listOfOpenCards.length = 0;
+     }
+ }
+
+
+ function showCard(e){
+     console.log(e);
+    listOfOpenCards.push(e.target);
+    e.target.className += ' open show';
+    console.log(listOfOpenCards.length);
+    if (listOfOpenCards.length === 2){
+        checkMatch();
+    }
+ }
+
+for (i = 0; i < cards.length; i++) {
+    cards[i].addEventListener("click", showCard);
+}
