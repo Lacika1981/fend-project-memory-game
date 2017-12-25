@@ -113,3 +113,9 @@ h1 {
 .score-panel .result.hidden {
     visibility: hidden;
 }
+
+span#time {
+    width: 100px;
+    text-align: justify;
+    display: inline-block;
+}

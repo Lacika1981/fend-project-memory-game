@@ -23,7 +23,7 @@ cardsArray.map(e => parentOfCards.appendChild(e));
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length,
+    let currentIndex = array.length,
         temporaryValue,
         randomIndex;
 
@@ -89,6 +89,7 @@ const cardLeftToOpen = () => {
         result[0]
             .classList
             .remove('hidden');
+            my_stopwatch.stop();
     }
 }
 
@@ -125,6 +126,9 @@ const checkMatch = () => {
 }
 
 const showCard = (e) => {
+    if(counter[0].textContent == 0){ //itdoes not want to wor with strict equal - no idea why - scratching my head
+        my_stopwatch.start();
+    }
     if (e.target.className !== 'card open show') { //prevent to click the same element twice - simple but works
         updateMovesCounter();
         listOfOpenCards.push(e.target);
@@ -141,3 +145,49 @@ for (i = 0; i < cardsArray.length; i++) {
 }
 
 reset[0].addEventListener('click', resetGame);
+
+
+
+
+const stopwatch = function(my_element_id) {
+	const $time = document.getElementById(my_element_id)
+	if(!$time) return
+
+	const api = {}
+	const duration = 50
+	let time = 0
+	let clocktimer
+	let h, m, s, ms
+
+	function pad(num, size) {
+	    const s = "0000" + String(num)
+	    return s.substr(s.length - size)
+	}
+
+	function formatTime() {
+	    time += duration
+	    h = Math.floor( time / (60 * 60 * 1000) )
+	    m = Math.floor( time / (60 * 1000) % 60)
+	    s = Math.floor(  time / 1000 % 60 )
+	    ms = time % 1000 / 10
+	    return pad(h, 2) + ':' + pad(m, 2) + ':' + pad(s, 2) + ':' + pad(ms, 2)
+	}
+
+	function update() {
+	    $time.innerHTML = formatTime()
+	}
+
+	api.start = function() {
+	    clocktimer = setInterval(update, duration)
+	}
+
+	api.stop = function() {
+	    clearInterval(clocktimer)
+	}
+
+	api.formatTime = formatTime
+
+	return api
+}
+
+const my_stopwatch = stopwatch('time');
