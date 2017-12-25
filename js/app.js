@@ -49,8 +49,8 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-listOfOpenCards = [];
-numberOfOpenCards = 16;
+let listOfOpenCards = [];
+let numberOfOpenCards = 16;
 counter[0].textContent = 0;
 let prevE = 0;
 
@@ -69,7 +69,7 @@ const showStars = (e) => {
             stars[0].appendChild(starLi);
         }
     }
-}
+};
 
 showStars(3);
 
@@ -81,26 +81,23 @@ const resetGame = () => {
     cardsArray = shuffle(cardsArray);
     cardsArray.map(e => parentOfCards.appendChild(e));
     result[0].classList.add('hidden');
+    my_stopwatch.reset();
     showStars(3);
-}
+};
 
 const cardLeftToOpen = () => {
     if (numberOfOpenCards === 0) {
-        result[0]
-            .classList
-            .remove('hidden');
-            my_stopwatch.stop();
+        result[0].classList.remove('hidden');
+        my_stopwatch.stop();
     }
-}
+};
 
 const updateMovesCounter = () => {
-    counter[0].textContent >= 36
-        ? showStars(1)
-        : counter[0].textContent >= 28 ? showStars(2) : showStars(3);
+    counter[0].textContent >= 36 ? showStars(1) : counter[0].textContent >= 28 ? showStars(2) : showStars(3);
     if (numberOfOpenCards !== 0) {
         counter[0].textContent++;
     }
-}
+};
 
 const cardsNotMatched = () => {
     setTimeout(() => {
@@ -108,25 +105,25 @@ const cardsNotMatched = () => {
         listOfOpenCards.length = 0;
     }, 250);
 
-}
+};
 
 const lockMatchedCards = (card1, card2) => {
     numberOfOpenCards -= 2;
     cardLeftToOpen();
     listOfOpenCards.forEach((e) => e.classList.add('match'));
     listOfOpenCards.length = 0;
-}
+};
 
 const checkMatch = () => {
     if (listOfOpenCards[0].firstElementChild.classList[1] === listOfOpenCards[1].firstElementChild.classList[1]) {
-        lockMatchedCards(listOfOpenCards[0], listOfOpenCards[1])
+        lockMatchedCards(listOfOpenCards[0], listOfOpenCards[1]);
     } else {
         cardsNotMatched();
     }
-}
+};
 
 const showCard = (e) => {
-    if(counter[0].textContent == 0){ //itdoes not want to wor with strict equal - no idea why - scratching my head
+    if (counter[0].textContent == 0) { //itdoes not want to wor with strict equal - no idea why - scratching my head
         my_stopwatch.start();
     }
     if (e.target.className !== 'card open show') { //prevent to click the same element twice - simple but works
@@ -138,56 +135,64 @@ const showCard = (e) => {
             checkMatch();
         }
     }
-}
+};
 
-for (i = 0; i < cardsArray.length; i++) {
+for (let i = 0; i < cardsArray.length; i++) {
     cardsArray[i].addEventListener("click", showCard);
 }
 
 reset[0].addEventListener('click', resetGame);
 
+//https://gist.github.com/electricg/4372563
+const stopwatch = function (my_element_id) {
+    const $time = document.getElementById(my_element_id);
+    if (!$time) 
+        return;
+    
+    const api = {};
+    const duration = 50;
+    let time = 0;
+    let clocktimer;
+    let h,
+        m,
+        s,
+        ms;
 
+    function pad(num, size) {
+        const s = "0000" + String(num);
+        return s.substr(s.length - size);
+    }
 
+    function formatTime() {
+        time += duration;
+        h = Math.floor(time / (60 * 60 * 1000));
+        m = Math.floor(time / (60 * 1000) % 60);
+        s = Math.floor(time / 1000 % 60);
+        ms = time % 1000 / 10;
+        return pad(h, 2) + ':' + pad(m, 2) + ':' + pad(s, 2) + ':' + pad(ms, 2);
+    }
 
-const stopwatch = function(my_element_id) {
-	const $time = document.getElementById(my_element_id)
-	if(!$time) return
+    function update() {
+        $time.innerHTML = formatTime();
+    }
 
-	const api = {}
-	const duration = 50
-	let time = 0
-	let clocktimer
-	let h, m, s, ms
+    api.reset = function () {
+        api.stop();
+        $time.innerHTML = '00:00:00:00';
+        time = 0;
+    };
 
-	function pad(num, size) {
-	    const s = "0000" + String(num)
-	    return s.substr(s.length - size)
-	}
+    api.start = function () {
+        clocktimer = setInterval(update, duration);
+    };
 
-	function formatTime() {
-	    time += duration
-	    h = Math.floor( time / (60 * 60 * 1000) )
-	    m = Math.floor( time / (60 * 1000) % 60)
-	    s = Math.floor(  time / 1000 % 60 )
-	    ms = time % 1000 / 10
-	    return pad(h, 2) + ':' + pad(m, 2) + ':' + pad(s, 2) + ':' + pad(ms, 2)
-	}
+    api.stop = function () {
+        clearInterval(clocktimer);
+    };
 
-	function update() {
-	    $time.innerHTML = formatTime()
-	}
+    api.formatTime = formatTime;
 
-	api.start = function() {
-	    clocktimer = setInterval(update, duration)
-	}
-
-	api.stop = function() {
-	    clearInterval(clocktimer)
-	}
-
-	api.formatTime = formatTime
-
-	return api
-}
+    return api;
+};
 
 const my_stopwatch = stopwatch('time');
