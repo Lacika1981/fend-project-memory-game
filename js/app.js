@@ -12,7 +12,7 @@ const stars = document.getElementsByClassName('stars');
 let listOfOpenCards = []; // holds the clicked cards in Array
 let numberOfOpenCards = 16; //start value - it is decreased by 2 if the two opened cards are matched
 let prevE = 0; //start value for the stars
-let cardsArray = Array.from(cards);
+let cardsArray = Array.from(cards); //makes Array from an Array-like HTMLCollection
 
 /*
  * Display the cards on the page
@@ -172,7 +172,7 @@ for (let i = 0; i < restart.length; i++) {
     restart[i].addEventListener('click', resetGame);
 }
 
-//https://gist.github.com/electricg/4372563
+//https://gist.github.com/electricg/4372563 - this stopwatch is under MIT license
 const stopwatch = (my_element_id) => {
     const $time = document.getElementById(my_element_id);
     if (!$time) 
