@@ -24,7 +24,7 @@ let cardsArray = Array.from(cards); //makes Array from an Array-like HTMLCollect
 const startGame = () => {
     cardsArray = shuffle(cardsArray);
     cardsArray.map(e => parentOfCards.appendChild(e));
-}
+};
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
