@@ -11,6 +11,7 @@ const restart = document.getElementsByClassName('restart');
 const stars = document.getElementsByClassName('stars');
 let listOfOpenCards = []; // holds the clicked cards in Array
 let numberOfOpenCards = 16; //start value - it is decreased by 2 if the two opened cards are matched
+let firstCardClicked = false;
 let prevE = 0; //start value for the stars
 let cardsArray = Array.from(cards); //makes Array from an Array-like HTMLCollection
 
@@ -56,6 +57,13 @@ function shuffle(array) {
 
 // this function updates the stars showed to the player according to their
 // performance
+
+/**
+ * @param {number} e
+ * @description this function updates the stars showed to the player according to their performance
+ */
+
+
 const showStars = (e) => {
     let nextE = e; //this small part of the function checks the previous value to the current value
     if (prevE !== nextE) {
@@ -80,7 +88,11 @@ const showStars = (e) => {
     }
 };
 
-const resetGame = () => { //reset every each value to the start value
+/**
+ * @description reset every each value to the start value
+ */
+
+const resetGame = () => {
     for (let i = 0; i < moves.length; i++) {
         moves[i].textContent = 0;
     }
@@ -94,39 +106,48 @@ const resetGame = () => { //reset every each value to the start value
     $('#exampleModal').modal('hide');
     my_stopwatch.reset();
     my_stopwatch2.reset();
+    firstCardClicked = false;
     startGame();
 };
 
 const cardLeftToOpen = () => {
     if (numberOfOpenCards === 0) {
+        /**
+         * @description it shows "win" above the game field
+         * */
         result
             .classList
-            .remove('hidden'); //it shows "win" above the game field
+            .remove('hidden');
         my_stopwatch.stop();
         my_stopwatch2.stop();
         $('#exampleModal').modal('show');
     }
 };
 
-const updateMovesCounter = () => { //it tracks the number of moves and calls the showStars() function
+/**
+ * @description it tracks the number of moves and calls the showStars() function
+ */
+
+const updateMovesCounter = () => {
     if (numberOfOpenCards !== 0) {
         for (let i = 0; i < moves.length; i++) {
             moves[i].textContent++;
         }
     }
-    moves[0].textContent >= 36
+    moves[0].textContent >= 10
         ? showStars(1)
-        : moves[0].textContent >= 28
+        : moves[0].textContent >= 8
             ? showStars(2)
             : showStars(3);
 };
 
 const cardsNotMatched = () => {
+    updateMovesCounter();
     setTimeout(() => {
+        listOfOpenCards.forEach((e) => e.classList.add('show', 'open'));
         listOfOpenCards.forEach((e) => e.classList.remove('show', 'open')); // it prevents the event when user clicks too fast and put more than two card into the 'listOfOpenCards' Array
         listOfOpenCards.length = 0;
-    }, 250);
-
+    }, 250); 
 };
 
 const lockMatchedCards = (card1, card2) => {
@@ -144,26 +165,33 @@ const checkMatch = () => {
     }
 };
 
+/**
+ * @param {clicked element} e
+ * @description this function called when a click event happens
+ */
+
 const showCard = (e) => {
-    if (moves[0].textContent == 0) { //it does not want to work with strict equal - no idea why - scratching my head
+    if (moves[0].textContent == 0 && firstCardClicked == false) { //it does not want to work with strict equal - no idea why - scratching my head
         my_stopwatch.start();
         my_stopwatch2.start();
+        firstCardClicked = true;
     }
     if (e.target.className !== 'card open show') { //prevent to click the same element twice - simple but works
-        updateMovesCounter();
         listOfOpenCards.push(e.target);
         e
             .target
             .classList
             .add('open', 'show');
-        console.log(listOfOpenCards.length);
         if (listOfOpenCards.length === 2) {
             checkMatch();
         }
     }
 };
 
-//these two for loops add addEventListeners to the elements
+/**
+ * @description these two 'for loops' add 'addEventListeners' to the elements
+ */
+
 for (let i = 0; i < cardsArray.length; i++) {
     cardsArray[i].addEventListener("click", showCard);
 }
@@ -172,7 +200,10 @@ for (let i = 0; i < restart.length; i++) {
     restart[i].addEventListener('click', resetGame);
 }
 
-//https://gist.github.com/electricg/4372563 - this stopwatch is under MIT license
+/**
+ * @description https://gist.github.com/electricg/4372563 - this stopwatch is under MIT license
+ */
+
 const stopwatch = (my_element_id) => {
     const $time = document.getElementById(my_element_id);
     if (!$time) 
@@ -227,5 +258,8 @@ const stopwatch = (my_element_id) => {
 const my_stopwatch = stopwatch('time');
 const my_stopwatch2 = stopwatch('time2');
 
-showStars(3); //start value for the stars
+/**
+ * @description start value for the stars
+ */
+showStars(3);
 startGame();

@@ -65,6 +65,36 @@ h1 {
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
+@keyframes match {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.33);
+    }
+
+    50% {
+        background-color: red;
+        transform: scale(1.15);
+    }
+
+    75% {
+        transform: scale(1.33);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.deck .card.match {
+    -webkit-animation: match 1s; /* Safari 4+ */
+  -moz-animation:    match 1s; /* Fx 5+ */
+  -o-animation:      match 1s; /* Opera 12+ */
+  animation: match 1s;
+}
+
 .deck .card.open {
     transform: rotateY(0);
     background: #02b3e4;
@@ -72,13 +102,13 @@ h1 {
 }
 
 .deck .card.show {
-    font-size: 33px;
+    font-size: 3rem;
 }
 
 .deck .card.match {
     cursor: default;
     background: #02ccba;
-    font-size: 33px;
+    font-size: 3rem;
 }
 
 /*
@@ -118,8 +148,116 @@ h1 {
     width: auto;
 }
 
+.modal-footer {
+    justify-content: center;
+}
+
+.modal-footer i {
+    font-size: 1rem;
+}
+
+.modal-footer .btn-primary,
+.modal-footer .btn-secondary {
+    width: 50px;
+    height: 50px;
+}
+
+.modal-footer .btn-primary {
+    border-radius: 50%;
+    border-color: transparent;
+    background-color: #02ccba;
+}
+
 span#time {
-    width: 100px;
+    width: auto;
     text-align: justify;
     display: inline-block;
+}
+
+@media screen and (orientation: portrait) and (max-height: 960px) {
+    h1 {
+        color: pink;
+    }
+
+    .deck,
+    .score-panel {
+        width: 360px;
+    }
+
+    .deck {
+        min-height: 375px;
+        margin-bottom: 0;
+    }
+
+    .score-panel {
+        flex-direction: column;
+    }
+
+    .deck .card {
+        width: 70px;
+        height: 70px;
+    }
+
+    .deck .card.show,
+    .deck .card.match {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (orientation: landscape) and (max-height: 960px) {
+    h1 {
+        color: pink;
+    }
+
+    .deck {
+        width: 640px;
+    }
+
+    .score-panel {
+        width: 540px;
+    }
+
+    .deck {
+        min-height: 250px;
+        margin-bottom: 0;
+    }
+
+    .deck .card {
+        width: 70px;
+        height: 70px;
+    }
+
+    .deck .card.show,
+    .deck .card.match {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (orientation: landscape) and (max-height: 960px) and (min-width: 1024px) {
+    h1 {
+        color: yellowgreen;
+    }
+
+    .deck {
+        width: 640px;
+    }
+
+    .score-panel {
+        width: 540px;
+    }
+
+    .deck {
+        min-height: 650px;
+        margin-bottom: 0;
+    }
+
+    .deck .card {
+        width: 120px;
+        height: 120px;
+    }
+
+    .deck .card.show,
+    .deck .card.match {
+        font-size: 2rem;
+    }
 }
